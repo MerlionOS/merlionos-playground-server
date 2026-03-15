@@ -1,0 +1,30 @@
+# Traefik dynamic configuration for MerlionOS Playground
+# Add to VPS-A Traefik's dynamic config directory.
+#
+# Routes:
+#   playground.merlionos.org         → GitHub Pages (static frontend)
+#   playground-api.merlionos.org     → VPS-D:3020 (playground server, WebSocket)
+
+http:
+  routers:
+    merlionos-playground-api:
+      rule: "Host(`playground-api.merlionos.org`)"
+      entryPoints:
+        - websecure
+      service: merlionos-playground-api
+      tls:
+        certResolver: letsencrypt
+
+    merlionos-playground-api-ws:
+      rule: "Host(`playground-api.merlionos.org`) && PathPrefix(`/ws`)"
+      entryPoints:
+        - websecure
+      service: merlionos-playground-api
+      tls:
+        certResolver: letsencrypt
+
+  services:
+    merlionos-playground-api:
+      loadBalancer:
+        servers:
+          - url: "http://10.0.0.4:3020"

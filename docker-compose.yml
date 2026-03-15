@@ -1,0 +1,33 @@
+# MerlionOS Playground Server
+# ============================================================
+# Deploy on VPS-D alongside QFC monitoring stack.
+#
+# Naming convention: merlionos-* prefix
+#
+# Usage:
+#   docker compose up -d --build
+#
+# Or add to VPS-D's monitoring compose via:
+#   docker compose -f /path/to/qfc/docker-compose.monitoring.yml \
+#                  -f /path/to/merlionos-playground-server/docker-compose.yml up -d
+
+services:
+  merlionos-playground:
+    build: .
+    container_name: merlionos-playground
+    restart: unless-stopped
+    ports:
+      - "${PLAYGROUND_PORT:-3020}:3020"
+    environment:
+      - PORT=3020
+      - MAX_INSTANCES=${MAX_INSTANCES:-2}
+      - SESSION_TIMEOUT=${SESSION_TIMEOUT:-600}
+      - IDLE_TIMEOUT=${IDLE_TIMEOUT:-120}
+      - QEMU_MEMORY=${QEMU_MEMORY:-128M}
+      - KERNEL_IMAGE=/app/images/merlionos.bin
+      - CORS_ORIGIN=${CORS_ORIGIN:-*}
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 512M
