@@ -5,14 +5,12 @@
 # Naming convention: merlionos-* prefix
 #
 # Usage:
-#   docker compose up -d --build
-#
-# Or add to VPS-D's monitoring compose via:
-#   docker compose -f /path/to/qfc/docker-compose.monitoring.yml \
-#                  -f /path/to/merlionos-playground-server/docker-compose.yml up -d
+#   docker compose up -d          # pulls from GHCR
+#   docker compose up -d --build  # builds locally
 
 services:
   merlionos-playground:
+    image: ghcr.io/merlionos/merlionos-playground-server:latest
     build: .
     container_name: merlionos-playground
     restart: unless-stopped
