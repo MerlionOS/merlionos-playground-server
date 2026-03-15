@@ -85,6 +85,7 @@ impl QemuInstance {
     }
 
     /// Check if QEMU is still running.
+    #[allow(dead_code)]
     pub fn is_running(&mut self) -> bool {
         self.child.try_wait().ok().flatten().is_none()
     }

@@ -69,10 +69,8 @@ pub async fn handle_session(mut ws: WebSocket, pool: Arc<Pool>) {
                     _ => break,
                 }
             }
-            if !buf.is_empty() {
-                if out_tx.send(buf).await.is_err() {
-                    break;
-                }
+            if !buf.is_empty() && out_tx.send(buf).await.is_err() {
+                break;
             }
         }
     });
@@ -105,12 +103,11 @@ pub async fn handle_session(mut ws: WebSocket, pool: Arc<Pool>) {
             msg = ws.recv() => {
                 match msg {
                     Some(Ok(Message::Text(text))) => {
-                        if let Ok(cmd) = serde_json::from_str::<serde_json::Value>(&text) {
-                            if cmd.get("type").and_then(|t| t.as_str()) == Some("input") {
-                                if let Some(data) = cmd.get("data").and_then(|d| d.as_str()) {
-                                    let _ = in_tx.send(data.as_bytes().to_vec()).await;
-                                }
-                            }
+                        if let Ok(cmd) = serde_json::from_str::<serde_json::Value>(&text)
+                            && cmd.get("type").and_then(|t| t.as_str()) == Some("input")
+                            && let Some(data) = cmd.get("data").and_then(|d| d.as_str())
+                        {
+                            let _ = in_tx.send(data.as_bytes().to_vec()).await;
                         }
                     }
                     Some(Ok(Message::Binary(data))) => {

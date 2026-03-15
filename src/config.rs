@@ -1,6 +1,7 @@
 use std::env;
 
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct Config {
     /// HTTP server port
     pub port: u16,
