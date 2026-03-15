@@ -1,0 +1,15 @@
+[package]
+name = "merlionos-playground-server"
+version = "0.1.0"
+edition = "2024"
+description = "MerlionOS Playground backend - QEMU instance pool with queue system"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+axum = { version = "0.8", features = ["ws"] }
+tower-http = { version = "0.6", features = ["cors", "fs"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+uuid = { version = "1", features = ["v4"] }
+tracing = "0.1"
+tracing-subscriber = "0.3"
