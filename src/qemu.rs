@@ -22,8 +22,7 @@ impl QemuInstance {
             .args([
                 "-drive", &format!("format=raw,file={}", config.kernel_image),
                 "-m", &config.qemu_memory,
-                "-serial", "stdio",
-                "-display", "none",
+                "-nographic",
                 "-no-reboot",
                 "-no-shutdown",
             ])
